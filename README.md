@@ -4,7 +4,7 @@
 
 ## Rapid Shell Executioner for Node.js using shelljs
 
-`spelunker()` sends your guy into the shell and brings back the goods quicker than going in and out for each command. Populate an object (first argument is quoted string of object's name) with the results of many shell commands, stored in another object (second argument), without starting a slow sub-shells for each command. spelunker goes in and gathers all results in shell variables and echoes them all out as JS syntax as fodder for eval() to execute and add to your object (first arg). spelunker only makes on trip into the shell (cave) to do all of this so it's faster! (you must `require('shelljs/global')`)  
+`spelunker()` sends your guy into the shell and brings back the goods quicker than going in and out for each command. Populate an object (first argument is quoted string of object's name) with the results of many shell commands, stored in another object (second argument), without starting a slow sub-shells for each command. spelunker goes in and gathers all results in shell variables and echoes them all out as JS syntax as fodder for eval() to execute and add to your object (first arg). spelunker only makes one trip into the shell/cave to do all of it's gathering of data so it's faster! (you must `require('shelljs/global')`)  
 
 Here is the source:  
 

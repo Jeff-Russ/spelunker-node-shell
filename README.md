@@ -47,3 +47,22 @@ console.log(resultsObj);
 //   git_email: 'jeffreylynnruss@gmail.com',
 //   author: 'Jeff-Russ' }
 ```
+## Under the Hood 
+
+Here is what the above example sends to the shell:  
+
+```javascript
+sys_user="resultsObj.sys_user = "\""$(id -F || id -un || whoami || git config user.name || '')"\""; "
+git_email="resultsObj.git_email = "\""$(git config user.email || '')"\""; "
+author="resultsObj.author = "\""$(git config user.name || id -F || id -un || whoami || '')"\""; "
+echo "$sys_user""$git_email""$author"
+```
+
+The escaped quotes will finally be rendered in the final statement which echoes this out:  
+
+```javascript
+resultsObj.sys_user = "Jeffrey Russ";
+resultsObj.git_email = "jeffreylynnruss@gmail.com";
+resultsObj.author = "Jeff-Russ"; 
+```
+Look familiar? It's just Javascript. spelunker then runs this with `eval()` which saves to the object!  

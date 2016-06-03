@@ -4,29 +4,58 @@
 
 ## Rapid Shell Executioner for Node.js using shelljs
 
-`spelunker()` sends your guy into the shell and brings back the goods quicker than going in and out for each command. Populate an object (first argument is quoted string of object's name) with the results of many shell commands, stored in another object (second argument), without starting a slow sub-shell for each command. spelunker goes in and gathers all results in shell variables and echoes them all out as JS syntax as fodder for eval() to execute and add to your object (first arg). spelunker only makes one trip into the shell/cave to do all of it's gathering of data so it's faster! (you must `require('shelljs/global')`)  
+`spelunker()` sends your guy into the shell and brings back the goods quicker than you going in and out for each command. Spelunker allows you to build up a list of shell commands to be executed all and once and store the results of each separately to an object you provide.  
+
+Without having to start a new sub-shell for each command. spelunker goes in and gathers all results in shell variables and echoes them all out as JS syntax as fodder for eval() to execute and add to your object (first arg). spelunker only makes one trip into the shell/cave to do all of it's gathering of data so it's faster! (you must `require('shelljs/global')`)  
+
+The first argument is the destination object. The destination object will be populated by all the results of the shell commands. It is passed to spelunker() as a context and will be appended/modified automatically. The second argument is an object filled with commands, where each key will the the property name created in the destination object. 
 
 Here is the source:  
 
 ```javascript
-exports.spelunker = function (resultsOb, commandsOb){
-  var cmd_string = '';
-  for(var propName in commandsOb) {
-    if (commandsOb.hasOwnProperty(propName)) {
-      cmd_string += propName + '="' + resultsOb + '.' + propName 
-          + ' = "\\""$(' + commandsOb[propName] + ')"\\""; "\n';
+spelunker = function(contextOb, commandsOb) {
+  var spelunk = function(cmdsOb) {
+    var cmd_string, output, prop;
+    cmd_string = '';
+    for (prop in cmdsOb) {
+      if (cmdsOb.hasOwnProperty(prop)) {
+        cmd_string += prop + "=this." + prop 
+                   + "\" = \"\"'$("+ cmdsOb[prop] + ")'\n\";\n";
+      }
     }
-  }
-  cmd_string += 'echo '
-  for(var propName in commandsOb) {
-    if (commandsOb.hasOwnProperty(propName)) {
-      cmd_string += '"$'+propName+'"';
+    cmd_string += 'echo ';
+    for (prop in cmdsOb) {
+      if (cmdsOb.hasOwnProperty(prop)) {
+        cmd_string += "\"$" + prop + "\"";
+      }
     }
-  }
-  var output = exec(cmd_string, { silent:true });
-  output = output.stdout + output.stderr;
-  eval(output);
-}
+    output = exec(cmd_string, {
+      silent: true
+    });
+    output = output.stdout + output.stderr;
+    eval(output);
+    return this;
+  };
+  return spelunk.call(contextOb, commandsOb);
+};
+```
+
+## CoffeeScript Version
+
+```coffee
+spelunker = (contextOb, commandsOb) ->
+  spelunk = (cmdsOb) ->
+    cmd_string = ''
+    for own prop of cmdsOb
+      cmd_string += "#{prop}=this.#{prop}\" = \"\"'$(#{cmdsOb[prop]})'\n\";\n"
+    cmd_string += 'echo '
+    for own prop of cmdsOb
+      cmd_string += "\"$#{prop}\""
+    output = exec(cmd_string, silent: true)
+    output = output.stdout + output.stderr
+    eval output
+    return this
+  spelunk.call contextOb, commandsOb
 ```
 
 ## Example Use: 
@@ -107,25 +136,6 @@ info.to_dir_readme = 'Readme.rdoc'
 info.from_dir_exists = 'true'
 info.from_dir_config = 'true'
 ```
+
 Look familiar? It's just Javascript. spelunker then runs this with `eval()` which saves to the object!  
 
-
-## CoffeeScript Version
-
-Don't even bother trying some automatic convertion tool Coffeescript-ify this; the converter 
-will have no idea that the output from the shell needs to be different since `eval` is now in 
-coffeeland. Here it is in Coffeescript:  
-
-```coffee
-spelunker = (resultsOb, cmdsOb) ->
-  cmd_string = ''
-  for own prop of cmdsOb
-    cmd_string += "#{prop}=#{resultsOb}.#{prop}\" = \"\"'$(#{cmdsOb[prop]})'\n\";\n"
-  cmd_string += 'echo '
-  for own prop of cmdsOb
-    cmd_string += "\"$#{prop}\""
-  output = exec(cmd_string, silent: true)
-  output = output.stdout + output.stderr
-  eval output
-  return
-```

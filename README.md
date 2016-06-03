@@ -70,3 +70,24 @@ resultsObj.git_email = "jeffreylynnruss@gmail.com";
 resultsObj.author = "Jeff-Russ"; 
 ```
 Look familiar? It's just Javascript. spelunker then runs this with `eval()` which saves to the object!  
+
+
+## CoffeeScript Version
+
+Don't even bother trying some automatic convertion tool Coffeescript-ify this; the converter 
+will have no idea that the output from the shell needs to be different since `eval` is now in 
+coffeeland. Here it is in Coffeescript:  
+
+```coffee
+spelunker = (resultsOb, cmdsOb) ->
+  cmd_string = ''
+  for own prop of cmdsOb
+    cmd_string += "#{prop}=#{resultsOb}.#{prop}\" = \"\"'$(#{cmdsOb[prop]})'\n\";\n"
+  cmd_string += 'echo '
+  for own prop of cmdsOb
+    cmd_string += "\"$#{prop}\""
+  output = exec(cmd_string, silent: true)
+  output = output.stdout + output.stderr
+  eval output
+  return
+```

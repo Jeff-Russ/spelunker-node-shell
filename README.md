@@ -12,12 +12,16 @@ Here is the source:
 exports.spelunker = function (resultsOb, commandsOb){
   var cmd_string = '';
   for(var propName in commandsOb) {
-    cmd_string += propName + '="' + resultsOb + '.' + propName 
-        + ' = "\\""$(' + commandsOb[propName] + ')"\\""; "\n';
+    if (commandsOb.hasOwnProperty(propName)) {
+      cmd_string += propName + '="' + resultsOb + '.' + propName 
+          + ' = "\\""$(' + commandsOb[propName] + ')"\\""; "\n';
+    }
   }
   cmd_string += 'echo '
   for(var propName in commandsOb) {
-    cmd_string += '"$'+propName+'"';
+    if (commandsOb.hasOwnProperty(propName)) {
+      cmd_string += '"$'+propName+'"';
+    }
   }
   var output = exec(cmd_string, { silent:true });
   output = output.stdout + output.stderr;

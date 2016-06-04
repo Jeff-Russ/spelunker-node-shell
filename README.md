@@ -69,7 +69,6 @@ Note that the object described by the string in argument 1 must be in scope of t
 ## Example Use: 
 
 ```javascript
-require('shelljs/global')
 
 info = {
   caller_dir: pwd().stdout,
@@ -78,6 +77,8 @@ info = {
   def_from_dir: __dirname + "/appgen-templates/default",
   conf_file: 'appgen-config.sh'
 };
+
+// put spelunker def here
 
 commands = {
   to_dir: "cd " + info.to_dir + "; pwd",

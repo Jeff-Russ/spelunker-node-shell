@@ -8,6 +8,12 @@
 
 Without having to start a new sub-shell for each command. spelunker goes in and gathers all results in shell variables and echoes them all out as JS syntax as fodder for eval() to execute and add to your object (first arg). spelunker only makes one trip into the shell/cave to do all of it's gathering of data so it's faster! (you must `require('shelljs/global')`)  
 
+# WARNING
+
+This little function uses `exec()` which executes raw strings as JavaScript without any sort of checking. To make thing even more of a risk, it's executing information handed back by the system's shell, effectively bursting the secure bubble that shields you Node environment from the OS. Spelunker was created for making an installer script run only by a developer on the a development machine and is not intended to live on a server or in a Node.js application.  
+
+## The Function Definition
+
 The first argument is the destination object. The destination object will be populated by all the results of the shell commands. It is passed to spelunker() as a context and will be appended/modified automatically. The second argument is an object filled with commands, where each key will the the property name created in the destination object. 
 
 Here is the source:  
@@ -57,6 +63,8 @@ spelunker = (contextOb, commandsOb) ->
     return this
   spelunk.call contextOb, commandsOb
 ```
+
+Note that the object described by the string in argument 1 must be in scope of the `spelunker()` script itself or else it will not be able to write to it and will throw an error. For this reason you should define `spelunker()` right in your code, after the object has be declared. It could be rewritten to accept a context or the object itself but it's probably a good idea not to put spelunker in an external file as a reusuable libray source anyway. This limitation this just enforces that. 
 
 ## Example Use: 
 

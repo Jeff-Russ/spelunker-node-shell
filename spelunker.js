@@ -22,7 +22,7 @@ req.spelunker = function(cmdsOb, resultsOb) {
   var output = exec(cmds_str, { silent: true }).stdout; // console.log(output)
 
   // this uses echoed output to populate temp resultsOb
-  eval(output); console.log(resultsOb)
+  eval(output); // console.log(resultsOb)
 
   return resultsOb; 
 };

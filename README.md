@@ -1,9 +1,9 @@
 # spelunker()
 
-[On GitHub](https://github.com/Jeff-Russ/spelunker-node-shelljs)
+[On GitHub](https://github.com/Jeff-Russ/spelunker-node-shell)
 
 
-## Rapid Shell Executioner for Node.js using shelljs
+## Rapid Shell Executioner for Node.js  
 
 `spelunker()` sends your guy into the shell and brings back the goods quicker than you going in and out for each command. Spelunker allows you to build up a list of shell commands to be executed all and once and store the results of each separately to an object you provide.  
 
@@ -18,13 +18,13 @@ This little function uses `exec()` which executes raw strings as JavaScript with
 In terminal, from anywhere in your project:  
 
 ```bash
-$ curl -O https://raw.githubusercontent.com/Jeff-Russ/spelunker-node-shelljs/master/spelunker.js
+$ curl -O https://raw.githubusercontent.com/Jeff-Russ/spelunker-node-shell/master/spelunker.js
 ```
 
 I also recommend downloading the man page, which is directly runnable in any location with `./spelunker.man`  
 
 ```bash
-$ curl -O https://raw.githubusercontent.com/Jeff-Russ/spelunker-node-shelljs/master/spelunker.man
+$ curl -O https://raw.githubusercontent.com/Jeff-Russ/spelunker-node-shell/master/spelunker.man
 $ ./spelunker.man  # displays manual
 ```
 

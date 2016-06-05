@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+// https://github.com/Jeff-Russ/spelunker-node-shell
+
 var req = {};
 
 req.spelunk = function(cmdsOb, resultsOb) {

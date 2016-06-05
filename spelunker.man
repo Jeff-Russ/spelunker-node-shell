@@ -1,8 +1,8 @@
 #!/usr/bin/env man
 .TH spelunker
 .PP
-On GitHub \[la]https://github.com/Jeff-Russ/spelunker-node-shelljs\[ra]
-.SH Rapid Shell Executioner for Node.js using shelljs
+On GitHub \[la]https://github.com/Jeff-Russ/spelunker-node-shell\[ra]
+.SH Rapid Shell Executioner for Node.js 
 .PP
 \fB\fCspelunker()\fR sends your guy into the shell and brings back the goods quicker than you going in and out for each command. Spelunker allows you to build up a list of shell commands to be executed all and once and store the results of each separately to an object you provide.  
 .PP
@@ -16,7 +16,7 @@ In terminal, from anywhere in your project:
 .PP
 .RS
 .nf
-$ curl \-O https://raw.githubusercontent.com/Jeff\-Russ/spelunker\-node\-shelljs/master/spelunker.js
+$ curl \-O https://raw.githubusercontent.com/Jeff\-Russ/spelunker\-node\-shell/master/spelunker.js
 .fi
 .RE
 .PP
@@ -24,7 +24,7 @@ I also recommend downloading the man page, which is directly runnable in any loc
 .PP
 .RS
 .nf
-$ curl \-O https://raw.githubusercontent.com/Jeff\-Russ/spelunker\-node\-shelljs/master/spelunker.man
+$ curl \-O https://raw.githubusercontent.com/Jeff\-Russ/spelunker\-node\-shell/master/spelunker.man
 $ ./spelunker.man  # displays manual
 .fi
 .RE

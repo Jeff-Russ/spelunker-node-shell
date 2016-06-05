@@ -6,7 +6,7 @@ On GitHub \[la]https://github.com/Jeff-Russ/spelunker-node-shelljs\[ra]
 .PP
 \fB\fCspelunker()\fR sends your guy into the shell and brings back the goods quicker than you going in and out for each command. Spelunker allows you to build up a list of shell commands to be executed all and once and store the results of each separately to an object you provide.  
 .PP
-Without having to start a new sub\-shell for each command. spelunker goes in and gathers all results in shell variables and echoes them all out as JS syntax as fodder for eval() to execute and add to your object (first arg). spelunker only makes one trip into the shell/cave to do all of it's gathering of data so it's faster! (you must \fB\fCrequire('shelljs/global')\fR)  
+Without having to start a new sub\-shell for each command. spelunker goes in and gathers all results in shell variables and echoes them all out as JS syntax as fodder for eval() to execute and add to your object (first arg). spelunker only makes one trip into the shell/cave to do all of it's gathering of data so it's faster!  
 .SH WARNING
 .PP
 This little function uses \fB\fCexec()\fR which executes raw strings as JavaScript without any sort of checking. To make thing even more of a risk, it's executing information handed back by the system's shell, effectively bursting the secure bubble that shields you Node environment from the OS. Spelunker was created for making an installer script run only by a developer on the a development machine and is not intended to live on a server or in a Node.js application.  

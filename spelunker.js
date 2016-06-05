@@ -2,7 +2,7 @@
 
 var req = {};
 
-req.spelunker = function(cmdsOb, resultsOb) {
+req.spelunk = function(cmdsOb, resultsOb) {
   var cmds_str, resultsOb = resultsOb || {}
 
   // add iterator method to cmdsOb
@@ -16,13 +16,14 @@ req.spelunker = function(cmdsOb, resultsOb) {
   cmds_str += 'echo '; // now we start the second part, echoing all back
   
   // second run of cmdObj.iter(), appending echo info:
-  cmdsOb.iter(function(prop) { cmds_str += "\"$"+prop+"\\n\"";} ); // console.log(cmds_str)
+  cmdsOb.iter(function(prop) { cmds_str += "\"$"+prop+"\\n\"";} ); console.log(cmds_str)
 
   // run all commands, getting output:
-  var output = exec(cmds_str, { silent: true }).stdout; // console.log(output)
+  var output = require('child_process').execSync( cmds_str, {stdio:'pipe'})
+                                       .toString().replace(/\n$/, '');
 
   // this uses echoed output to populate temp resultsOb
-  eval(output); // console.log(resultsOb)
+  eval(output); //console.log(resultsOb)
 
   return resultsOb; 
 };

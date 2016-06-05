@@ -2,6 +2,7 @@
 
 [On GitHub](https://github.com/Jeff-Russ/spelunker-node-shelljs)
 
+
 ## Rapid Shell Executioner for Node.js using shelljs
 
 `spelunker()` sends your guy into the shell and brings back the goods quicker than you going in and out for each command. Spelunker allows you to build up a list of shell commands to be executed all and once and store the results of each separately to an object you provide.  
@@ -12,59 +13,47 @@ Without having to start a new sub-shell for each command. spelunker goes in and 
 
 This little function uses `exec()` which executes raw strings as JavaScript without any sort of checking. To make thing even more of a risk, it's executing information handed back by the system's shell, effectively bursting the secure bubble that shields you Node environment from the OS. Spelunker was created for making an installer script run only by a developer on the a development machine and is not intended to live on a server or in a Node.js application.  
 
-## The Function Definition
+## Installation  
 
-The first argument is the destination object. The destination object will be populated by all the results of the shell commands. It is passed to spelunker() as a context and will be appended/modified automatically. The second argument is an object filled with commands, where each key will the the property name created in the destination object. 
+In terminal, from anywhere in your project:  
 
-Here is the source:  
+```bash
+$ curl -O https://raw.githubusercontent.com/Jeff-Russ/spelunker-node-shelljs/master/spelunker.js
+```
+
+I also recommend downloading the man page, which is directly runnable in any location with `./spelunker.man`  
+
+```bash
+$ curl -O https://raw.githubusercontent.com/Jeff-Russ/spelunker-node-shelljs/master/spelunker.man
+$ ./spelunker.man  # displays manual
+```
+
+If you get access denied when trying to run either, use `chmod u+x ./filename`.  
+
+Then in your JS file: 
 
 ```javascript
-spelunker = function(contextOb, commandsOb) {
-  var spelunk = function(cmdsOb) {
-    var cmd_string, output, prop;
-    cmd_string = '';
-    for (prop in cmdsOb) {
-      if (cmdsOb.hasOwnProperty(prop)) {
-        cmd_string += prop + "=this." + prop 
-                   + "\" = \"\"'$("+ cmdsOb[prop] + ")'\n\";\n";
-      }
-    }
-    cmd_string += 'echo ';
-    for (prop in cmdsOb) {
-      if (cmdsOb.hasOwnProperty(prop)) {
-        cmd_string += "\"$" + prop + "\"";
-      }
-    }
-    output = exec(cmd_string, {
-      silent: true
-    });
-    output = output.stdout + output.stderr;
-    eval(output);
-    return this;
-  };
-  return spelunk.call(contextOb, commandsOb);
-};
+require('./path/to/spelunker.js').globalize();
 ```
 
-## CoffeeScript Version
+although the `.js` part isn't needed. The `.globalize()` call makes the `spelunker()` method directly available but you could also do:  
 
-```coffee
-spelunker = (contextOb, commandsOb) ->
-  spelunk = (cmdsOb) ->
-    cmd_string = ''
-    for own prop of cmdsOb
-      cmd_string += "#{prop}=this.#{prop}\" = \"\"'$(#{cmdsOb[prop]})'\n\";\n"
-    cmd_string += 'echo '
-    for own prop of cmdsOb
-      cmd_string += "\"$#{prop}\""
-    output = exec(cmd_string, silent: true)
-    output = output.stdout + output.stderr
-    eval output
-    return this
-  spelunk.call contextOb, commandsOb
+```javascript
+var x = require('./path/to/spelunker.js');
+
+x.spelunker(your args);
 ```
 
-Note that the object described by the string in argument 1 must be in scope of the `spelunker()` script itself or else it will not be able to write to it and will throw an error. For this reason you should define `spelunker()` right in your code, after the object has be declared. It could be rewritten to accept a context or the object itself but it's probably a good idea not to put spelunker in an external file as a reusuable libray source anyway. This limitation this just enforces that. 
+It's annoying but common.  
+
+## The Function Definition
+
+The first argument is an object you fill with commands you fill with commands before calling `spelunker()`. It's see below as `commands`. Each property name will the the property name created in a destination object, which will hold the captured outputs of each command from the commands object.  
+
+The destination object, seen below as `info`, can be provided as the second argument and `spelunker()` will write to it. Any property names matching those in the commands object will be overwritten with the new output. The rest of the properties will remain untouched. If you don't provide a second argument, `spelunker()` will spit out a new one. Either way there will be a return, but whether or not it's a newly created object depends on whether you provided one.  
+
+__NOTE__ that `spelunker` will add a `.iter(fn)` method to the commands object so you should avoid this property name.  
+
 
 ## Example Use: 
 
@@ -77,8 +66,6 @@ info = {
   def_from_dir: __dirname + "/appgen-templates/default",
   conf_file: 'appgen-config.sh'
 };
-
-// put spelunker def here
 
 commands = {
   to_dir: "cd " + info.to_dir + "; pwd",
@@ -95,7 +82,7 @@ commands = {
   from_dir_config: "test -f " + info.from_dir + "/" + info.conf_file + " && echo true || echo false"
 };
 
-spelunker("info", commands);
+spelunker(commands, info);
 console.log(info);
 ```
 
@@ -118,6 +105,24 @@ this prints out:
   from_dir_exists: 'true',
   from_dir_config: 'true' }
 ```
+
+## Another Way
+
+If you wanted to not have two object and just write back to the same object that has the command you can provide the same argument twice without any issue:  
+```javascript
+spelunker(shellvars, shellvars);
+```
+
+___YOU MUST BE SURE__ that the object only contains valid shell commands and __nothing else__. After you've run this it's all over, don't put that spelunk that cave again, unless you want some wild things happening in your shell!!  
+
+In any case, now that your output object entered the cave as a command object it will have the `iter()` method added, which might be a nice bonus.  It takes a single argument: a function that is called for each property and given the property name as it's argument.  Here is it in use:  
+
+```javascript
+info.iter(function(prop){
+  if (info[prop] == 'true') console.log(prop);
+});
+```
+
 ## Under the Hood 
 
 Here is what the above example sends to the shell:  

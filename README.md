@@ -105,7 +105,7 @@ this prints out:
   from_dir_exists: true,
   from_dir_config: true }
 ```
-Notice you're not seeing `'true'` but `true`. Spelunker will post-process the results object to replace any string representing a boolean to a boolean. It also does the same with integers and floats.  
+Notice you're not seeing `'true'` but `true`. Spelunker will post-process the results object to replace any string representing a boolean to a boolean. ~~It also does the same with integers and floats.~~  
 
 ## Another Way
 

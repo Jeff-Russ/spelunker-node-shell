@@ -30,12 +30,12 @@ req.spelunker = function(cmdsOb, resultsOb) {
   // re-interpret types:
   cmdsOb.iter(function(prop) {
     // if isn't number string see if it's a boolean string. Make actual boolean
-    if (isNaN(resultsOb[prop])) {
+    // if (isNaN(resultsOb[prop])) {
       if     (resultsOb[prop] === "true") { resultsOb[prop] = true;  }
       else if(resultsOb[prop] === "false"){ resultsOb[prop] = false; }
-    }
-    // if a number string, make an actual number
-    else { resultsOb[prop] =  Number(resultsOb[prop]); }
+    // }
+    // // if a number string, make an actual number
+    // else { resultsOb[prop] =  Number(resultsOb[prop]); }
   }); 
 
   return resultsOb; 

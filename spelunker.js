@@ -4,7 +4,7 @@
 
 var req = {};
 
-req.spelunk = function(cmdsOb, resultsOb) {
+req.spelunker = function(cmdsOb, resultsOb) {
   var cmds_str, resultsOb = resultsOb || {}
 
   // add iterator method to cmdsOb

@@ -97,14 +97,15 @@ this prints out:
   sys_user: 'Jeffrey Russ',
   git_email: 'jeffreylynnruss@gmail.com',
   author: 'Jeff-Russ',
-  to_dir_exists: 'true',
-  to_dir_empty: 'false',
-  to_dir_has_git: 'true',
-  to_dir_has_json: 'false',
+  to_dir_exists: true,
+  to_dir_empty: false,
+  to_dir_has_git: true,
+  to_dir_has_json: false,
   to_dir_readme: 'Readme.rdoc',
-  from_dir_exists: 'true',
-  from_dir_config: 'true' }
+  from_dir_exists: true,
+  from_dir_config: true }
 ```
+Notice you're not seeing `'true'` but `true`. Spelunker will post-process the results object to replace any string representing a boolean to a boolean. It also does the same with integers and floats.  
 
 ## Another Way
 
@@ -119,7 +120,7 @@ In any case, now that your output object entered the cave as a command object it
 
 ```javascript
 info.iter(function(prop){
-  if (info[prop] == 'true') console.log(prop);
+  if (info[prop] == true) console.log(prop);
 });
 ```
 
@@ -142,13 +143,13 @@ info.from_dir = '/Users/Jeff/bin/from'
 info.sys_user = 'Jeffrey Russ'
 info.git_email = 'jeffreylynnruss@gmail.com'
 info.author = 'Jeff-Russ'
-info.to_dir_exists = 'true'
-info.to_dir_empty = 'false'
-info.to_dir_has_git = 'true'
-info.to_dir_has_json = 'false'
+info.to_dir_exists = true
+info.to_dir_empty = false
+info.to_dir_has_git = true
+info.to_dir_has_json = false
 info.to_dir_readme = 'Readme.rdoc'
-info.from_dir_exists = 'true'
-info.from_dir_config = 'true'
+info.from_dir_exists = true
+info.from_dir_config = true
 ```
 
 Look familiar? It's just Javascript. spelunker then runs this with `eval()` which saves to the object!  

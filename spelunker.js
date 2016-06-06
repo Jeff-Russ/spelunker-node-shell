@@ -18,7 +18,7 @@ req.spelunker = function(cmdsOb, resultsOb) {
   cmds_str += 'echo '; // now we start the second part, echoing all back
   
   // second run of cmdObj.iter(), appending echo info:
-  cmdsOb.iter(function(prop) { cmds_str += "\"$"+prop+"\\n\"";} ); console.log(cmds_str)
+  cmdsOb.iter(function(prop) { cmds_str += "\"$"+prop+"\\n\"";} ); // console.log(cmds_str)
 
   // run all commands, getting output:
   var output = require('child_process').execSync( cmds_str, {stdio:'pipe'})
@@ -26,6 +26,17 @@ req.spelunker = function(cmdsOb, resultsOb) {
 
   // this uses echoed output to populate temp resultsOb
   eval(output); //console.log(resultsOb)
+
+  // re-interpret types:
+  cmdsOb.iter(function(prop) {
+    // if isn't number string see if it's a boolean string. Make actual boolean
+    if (isNaN(resultsOb[prop])) {
+      if     (resultsOb[prop] === "true") { resultsOb[prop] = true;  }
+      else if(resultsOb[prop] === "false"){ resultsOb[prop] = false; }
+    }
+    // if a number string, make an actual number
+    else { resultsOb[prop] =  Number(resultsOb[prop]); }
+  }); 
 
   return resultsOb; 
 };
